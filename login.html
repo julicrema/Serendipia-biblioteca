@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iniciar sesión - Serendipia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="lb-auth-bg">
+  <div class="lb-auth-main-container">
+    <div class="lb-auth-form-section">
+      <div class="lb-auth-form-container">
+        <div class="lb-auth-logo">
+          <i class="fas fa-sign-in-alt"></i>
+          <h2>Iniciar Sesión</h2>
+        </div>
+        <form id="loginForm">
+          <div class="lb-auth-form-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="usuario" class="lb-auth-input" placeholder="Usuario o correo electrónico" required>
+          </div>
+          <div class="lb-auth-form-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" class="lb-auth-input" placeholder="Contraseña" required>
+          </div>
+          <button class="lb-auth-btn-primary" type="submit">
+            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+          </button>
+        </form>
+        <div class="lb-auth-link">
+          <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Sembrar usuario admin si no existe
+    (function seedAdmin(){
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      const hasAdmin = usuarios.some(u => u.username === 'admin');
+      if (!hasAdmin) {
+        usuarios.push({
+          nombre: 'Administrador',
+          email: 'admin@serendipia.local',
+          username: 'admin',
+          password: 'Admin123',
+          isAdmin: true,
+          fechaRegistro: new Date().toISOString()
+        });
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      }
+    })();
+
+    function iniciarSesion() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!usuario || !password) {
+        alert('Por favor, completa todos los campos');
+        return;
+      }
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      const usuarioEncontrado = usuarios.find(u =>
+        (u.username === usuario || u.email === usuario) && u.password === password
+      );
+
+      if (usuarioEncontrado) {
+        const sessionUser = Object.assign({}, usuarioEncontrado, {
+          isAdmin: Boolean(usuarioEncontrado.isAdmin) || usuarioEncontrado.username === 'admin'
+        });
+        localStorage.setItem('usuarioActual', JSON.stringify(sessionUser));
+        alert('¡Bienvenido, ' + usuarioEncontrado.nombre + '!');
+
+        // 🔹 Redirigir según tipo de usuario
+        if (sessionUser.isAdmin) {
+          window.location.href = 'admin.html';   // Admin directo al panel
+        } else {
+          window.location.href = 'principal.html'; // Usuario normal al principal
+        }
+      } else {
+        alert('Usuario, email o contraseña incorrectos');
+      }
+    }
+
+    // Event listener para el formulario
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          iniciarSesion();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

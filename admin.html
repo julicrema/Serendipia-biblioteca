@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - Serendipia</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo-group">
+      <div class="logo"></div>
+      <span class="logo-text">Serendipia</span>
+    </div>
+    <nav class="nav">
+      <a href="principal.html" class="nav-link">Catálogo</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+      <a href="#" class="nav-button" onclick="cerrarSesion()">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="admin-panel">
+      <h1><i class="fas fa-cogs"></i> Administración de Libros</h1>
+      <p>Completa los campos para agregar o editar un libro en el catálogo.</p>
+
+      <form id="adminAddBookForm" class="admin-form">
+        <div class="form-group">
+          <label for="admTitulo"><i class="fas fa-book"></i> Título</label>
+          <input type="text" id="admTitulo" placeholder="Ejemplo: Cien Años de Soledad" required>
+          <small>Introduce el título completo del libro</small>
+        </div>
+        <div class="form-group">
+          <label for="admAutor"><i class="fas fa-user"></i> Autor</label>
+          <input type="text" id="admAutor" placeholder="Ejemplo: Gabriel García Márquez" required>
+        </div>
+        <div class="form-group">
+          <label for="admGenero"><i class="fas fa-tags"></i> Género</label>
+          <select id="admGenero" required>
+            <option value="">Selecciona un género</option>
+            <option value="Ficción Literaria">Ficción Literaria</option>
+            <option value="Romántico">Romántico / Dark Romance</option>
+            <option value="Fantasía">Fantasía / Aventura</option>
+            <option value="Ciencia Ficción">Ciencia Ficción</option>
+            <option value="Misterio">Misterio / Policíaco</option>
+            <option value="Thriller">Suspenso / Thriller</option>
+            <option value="Terror">Terror / Horror</option>
+            <option value="Histórico">Histórico</option>
+            <option value="Juvenil">Juvenil</option>
+            <option value="Infantil">Infantil</option>
+            <option value="Poesía">Poesía</option>
+            <option value="Autoayuda">Autoayuda / Desarrollo personal</option>
+            <option value="Mitos y Leyendas">Mitos y Leyendas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="admDescripcion"><i class="fas fa-align-left"></i> Descripción</label>
+          <textarea id="admDescripcion" rows="3" placeholder="Resumen del libro..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="admAno"><i class="fas fa-calendar"></i> Año de publicación</label>
+          <input type="number" id="admAno" placeholder="2023" min="1900" max="2025">
+        </div>
+        <div class="form-group">
+          <label for="admPortada"><i class="fas fa-image"></i> Portada</label>
+          <input type="file" id="admPortada" accept="image/*">
+          <small>Sube una imagen de la portada del libro</small>
+        </div>
+        <div class="form-group">
+          <label for="admPdf"><i class="fas fa-file-pdf"></i> Archivo PDF</label>
+          <input type="file" id="admPdf" accept="application/pdf">
+          <small>Sube el archivo PDF del libro</small>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="saveBookBtn">
+            <i class="fas fa-save"></i> Guardar Libro
+          </button>
+          <button type="button" class="btn-secondary" id="cancelEditBtn" style="display:none;">
+            <i class="fas fa-times"></i> Cancelar Edición
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="admin-table-section">
+      <h2><i class="fas fa-list"></i> Libros en el Catálogo</h2>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th><i class="fas fa-book"></i> Título</th>
+              <th><i class="fas fa-user"></i> Autor</th>
+              <th><i class="fas fa-tags"></i> Género</th>
+              <th><i class="fas fa-calendar"></i> Año</th>
+              <th><i class="fas fa-cogs"></i> Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="bookTableBody">
+            <tr>
+              <td colspan="5" class="loading">Cargando libros...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="contact-info">
+      <p><i class="fas fa-phone"></i> +54 9 11 1234-5678</p>
+      <p><i class="fas fa-envelope"></i> serendipia@gmail.com</p>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Serendipia — Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <script src="libros.js"></script>
+</body>
+</html>

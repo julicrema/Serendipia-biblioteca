@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crear cuenta - Serendipia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="lb-auth-bg">
+  <div class="lb-auth-main-container">
+    <div class="lb-auth-form-section">
+      <div class="lb-auth-form-container">
+        <div class="lb-auth-logo">
+          <i class="fas fa-user-plus"></i>
+          <h2>Crear Cuenta</h2>
+        </div>
+        <form id="registroForm">
+          <div class="lb-auth-form-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="nombre" class="lb-auth-input" placeholder="Nombre completo" required>
+          </div>
+          <div class="lb-auth-form-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" class="lb-auth-input" placeholder="Correo electrónico" required>
+          </div>
+          <div class="lb-auth-form-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" class="lb-auth-input" placeholder="Nombre de usuario" required>
+          </div>
+          <div class="lb-auth-form-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" class="lb-auth-input" placeholder="Contraseña" required>
+          </div>
+          <div class="lb-auth-form-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirmPassword" class="lb-auth-input" placeholder="Confirmar contraseña" required>
+          </div>
+          <div class="lb-auth-password-requirements">
+            <h4>Requisitos de contraseña:</h4>
+            <ul>
+              <li id="req-length">Mínimo 8 caracteres</li>
+              <li id="req-uppercase">Al menos una letra mayúscula</li>
+              <li id="req-number">Al menos un número</li>
+            </ul>
+          </div>
+          <button class="lb-auth-btn-primary" type="submit">
+            <i class="fas fa-user-plus"></i> Crear Cuenta
+          </button>
+        </form>
+        <div class="lb-auth-link">
+          <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function registrarUsuario() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (!nombre || !email || !username || !password || !confirmPassword) {
+        alert('Por favor, completa todos los campos');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Por favor, ingresa un email válido');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
+
+      if (!validarPassword(password)) {
+        alert('La contraseña no cumple con los requisitos de seguridad');
+        return;
+      }
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      if (usuarios.find(u => u.username === username)) {
+        alert('El nombre de usuario ya existe. Por favor, elige otro.');
+        return;
+      }
+
+      if (usuarios.find(u => u.email === email)) {
+        alert('El email ya está registrado. Por favor, usa otro email o inicia sesión.');
+        return;
+      }
+
+      const nuevoUsuario = {
+        nombre: nombre,
+        email: email,
+        username: username,
+        password: password,
+        isAdmin: username.toLowerCase() === 'admin',
+        fechaRegistro: new Date().toISOString()
+      };
+
+      usuarios.push(nuevoUsuario);
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+      alert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
+      window.location.href = 'login.html';
+    }
+
+    function validarPassword(password) {
+      const minLength = password.length >= 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      return minLength && hasUpperCase && hasNumber;
+    }
+
+    function updatePasswordRequirements(password) {
+      const requirements = {
+        length: document.getElementById('req-length'),
+        uppercase: document.getElementById('req-uppercase'),
+        number: document.getElementById('req-number')
+      };
+
+      if (requirements.length) {
+        requirements.length.style.color = password.length >= 8 ? '#4a7c59' : '#666';
+      }
+      if (requirements.uppercase) {
+        requirements.uppercase.style.color = /[A-Z]/.test(password) ? '#4a7c59' : '#666';
+      }
+      if (requirements.number) {
+        requirements.number.style.color = /\d/.test(password) ? '#4a7c59' : '#666';
+      }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const registroForm = document.getElementById('registroForm');
+      if (registroForm) {
+        registroForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          registrarUsuario();
+        });
+      }
+
+      const passwordInput = document.getElementById('password');
+      if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+          updatePasswordRequirements(this.value);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

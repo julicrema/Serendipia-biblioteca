@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serendipia - Librería</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" media="print" onload="this.media='all'">
+
+</head>
+<body>
+  <!-- Header -->
+<header class="header">
+  <div class="logo-group">
+    <div class="logo"></div>
+    <span class="logo-text">Serendipia</span>
+  </div>
+  <!-- Botón de menú (hamburguesa) -->
+  <div class="header-actions">
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav" id="mainNav">
+        <button class="close-menu-btn" id="closeMenuBtn" aria-label="Cerrar menú">
+          <i class="fas fa-times"></i>
+        </button>
+        <a href="index.html" class="nav-link" id="menuLink">Catálogo</a>
+        <a href="perfil.html" class="nav-link" id="perfilLink" style="display:none;">Perfil</a>
+        <a href="admin.html" class="nav-link" id="adminLink" style="display:none;">Administración</a>
+        <a href="auth.html?view=register" class="nav-link" id="registroLink">Registro</a>
+        <a href="#" id="logoutLink" class="nav-button" style="display:none;" onclick="cerrarSesion()">Cerrar Sesión</a>
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Cambiar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+        <a href="auth.html" class="nav-button" id="loginLink">Iniciar Sesión</a>
+    </nav>
+      <button class="search-toggle-btn" id="searchToggleBtn" aria-label="Abrir búsqueda">
+        <i class="fas fa-search"></i>
+      </button>
+  </div>
+  </header>
+<!-- Carrusel -->
+<div class="carousel-coverflow" aria-label="Carrusel de portadas">
+  <button class="carousel-btn carousel-btn-prev" aria-label="Anterior">‹</button>
+  <div class="carousel-coverflow-track">
+    <!-- ID 2: Alas de Sangre -->
+    <div class="carousel-coverflow-slide active" data-book-id="2">
+      <img src="libros/asangre.jpg" alt="Alas de Sangre">
+    </div>
+    <!-- ID 1: Tan poca vida -->
+    <div class="carousel-coverflow-slide" data-book-id="1">
+      <img src="libros/vida.jpg" alt="Tan poca vida">
+    </div>
+    <!-- ID 3: El túnel -->
+    <div class="carousel-coverflow-slide" data-book-id="3">
+      <img src="libros/etunel.jpg" alt="El túnel">
+    </div>
+    <!-- ID 4: Orgullo y Prejuicio -->
+    <div class="carousel-coverflow-slide" data-book-id="4">
+      <img src="libros/Orgullo_y_prejuicio.jpg" alt="Orgullo y Prejuicio">
+    </div>
+    <!-- ID 5: El señor de los anillos -->
+    <div class="carousel-coverflow-slide" data-book-id="5">
+      <img src="libros/gerals.jpg" alt="El señor de los anillos">
+    </div>
+  </div>
+  <button class="carousel-btn carousel-btn-next" aria-label="Siguiente">›</button>
+</div>
+
+<!-- Catálogo  -->
+<main class="main-content">
+  <div class="container">
+    <h2 class="section-title"> Catálogo de Libros</h2>
+    <p class="section-subtitle"> Explora nuestra colección y agrega tus favoritos a tu biblioteca personal</p>
+    <section id="catalogo" class="catalogo"></section>
+  </div>
+</main>
+
+<!-- ✅ NUEVA SECCIÓN DE GÉNEROS -->
+<div id="genreSectionsContainer" class="container">
+  <!-- Las secciones por género se insertarán aquí dinámicamente -->
+</div>
+
+<!-- ✅ PAGINACIÓN MOVIDA AL FINAL -->
+<div class="container">
+  <div id="paginacion" class="paginacion"></div>
+</div>
+
+<!-- 📖 Modal de Detalles del Libro -->
+<div id="bookDetailModal" class="book-modal">
+  <div class="book-modal-content">
+    <span class="close-modal" id="closeBookModal">&times;</span>
+    <div class="book-modal-grid">
+      <div class="book-cover-container">
+        <img id="modalBookCover" src="" alt="Portada del libro">
+      </div>
+      <div class="book-info-container">
+        <h2 id="modalBookTitle"></h2>
+        <div class="book-meta">
+          <span id="modalBookAuthor"></span> • 
+          <span id="modalBookGenre"></span>
+        </div>
+        <h3>Sinopsis</h3>
+        <p id="modalBookDescription"></p>
+        <div class="book-actions">
+          <button id="modalAddToLibrary" class="btn-primary">📚 Agregar a Biblioteca </button>
+          <a id="modalReadPdf" class="btn-primary" href="#" target="_blank" style="display:none;"> Leer PDF </a>
+          <button id="modalReportBtn" class="btn-secondary"><i class="fas fa-flag"></i> Reportar</button>
+        </div>
+      </div>
+    </div>
+    <!-- ✅ NUEVA SECCIÓN DE RESEÑAS -->
+    <div class="book-reviews-container">
+      <h3 class="section-title">Reseñas de Usuarios</h3>
+      
+      <!-- Formulario para nueva reseña (inicialmente oculto) -->
+      <div id="reviewFormContainer" style="display:none;">
+        <h4>Deja tu reseña</h4>
+        <form id="reviewForm">
+          <div class="review-rating-input">
+            <span>Tu calificación:</span>
+            <div class="stars" data-rating="0">
+              <i class="fas fa-star" data-value="1"></i><i class="fas fa-star" data-value="2"></i><i class="fas fa-star" data-value="3"></i><i class="fas fa-star" data-value="4"></i><i class="fas fa-star" data-value="5"></i>
+            </div>
+          </div>
+          <textarea id="reviewComment" rows="3" placeholder="Escribe tu comentario aquí..." required></textarea>
+          <button type="submit" class="btn-primary">Enviar Reseña</button>
+        </form>
+      </div>
+      <div id="modalBookReviewsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 🔎 Modal de Búsqueda -->
+<div id="searchModal" class="search-modal">
+  <div class="search-modal-content">
+    <button class="close-modal" id="closeSearchModal">&times;</button>
+    <div class="search-modal-header">
+      <i class="fas fa-search"></i>
+      <input type="text" id="modalSearchInput" placeholder="Busca un libro por título o autor...">
+    </div>
+    <div id="searchResultsContainer" class="search-results-container">
+      <!-- Los resultados de la búsqueda en tiempo real aparecerán aquí -->
+      <p class="search-placeholder">Escribe para encontrar libros en nuestro catálogo.</p>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="contact-info">
+    <p><i class="fas fa-phone"></i> +54 9 11 1234-5678</p>
+    <p><i class="fas fa-envelope"></i> serendipia@gmail.com</p>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Serendipia — Todos los derechos reservados.
+  </div>
+</footer>
+<script src="utils.js"></script>
+<script src="carousel.js" defer></script>
+<script src="libros.js" defer></script>
+</body>
+</html>

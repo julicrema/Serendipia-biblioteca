@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lector - Serendipia</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <style>
+    .lector-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    #pdf-viewer {
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    html[data-theme="dark"] #pdf-viewer {
+      border-color: rgba(255,255,255,0.1);
+    }
+    #pdf-canvas {
+      width: 100%;
+      height: auto;
+    }
+    .lector-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .lector-nav button {
+      width: 100px;
+    }
+    #page-num-container {
+      font-weight: 600;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo-group">
+      <div class="logo"></div>
+      <span class="logo-text">Serendipia</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Volver al Catálogo</a>
+      <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Cambiar tema">
+        <i class="fas fa-moon"></i>
+      </button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="lector-container">
+      <h2 id="lector-titulo">Cargando libro...</h2>
+      <div id="pdf-viewer"><canvas id="pdf-canvas"></canvas></div>
+      <div class="lector-nav">
+        <button id="prev-page" class="btn-secondary"><i class="fas fa-arrow-left"></i> Anterior</button>
+        <span id="page-num-container">Página <span id="page-num"></span> de <span id="page-count"></span></span>
+        <button id="next-page" class="btn-secondary">Siguiente <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </main>
+  <script src="lector.js" defer></script>
+</body>
+</html>

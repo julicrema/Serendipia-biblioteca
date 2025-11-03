@@ -1,0 +1,1017 @@
+/* ===== Estilo Base ===== */
+html:not([data-theme="dark"]){
+  --bg: #f8f9fa; /* Fondo gris claro */
+  --card: #ffffff; /* Tarjetas blancas */
+  --muted: #6c757d; /* Texto gris oscuro */
+  --text: #212529; /* Texto negro */
+  --gold:#c9a227;
+  --accent:var(--gold);
+  --glass: rgba(0,0,0,0.03);
+  --shadow: 0 8px 30px rgba(0,0,0,0.1); /* Sombra más suave */
+  --radius:12px;
+}
+
+/*=== Tema Oscuro ===*/
+html[data-theme="dark"] {
+  --bg: #0f1113;
+  --card: #141617;
+  --muted: #9aa3a6;
+  --text: #e6e6e6;
+  --gold: #c9a227;
+  --accent: var(--gold);
+  --glass: rgba(255,255,255,0.03);
+  --shadow: 0 8px 30px rgba(0,0,0,0.6);
+  --radius: 12px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+}
+
+/* ===== Scrollbar Personalizado (Oculto) ===== */
+/* Oculta el scrollbar pero mantiene la funcionalidad de scroll */
+
+/* Para navegadores Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent; /* Opcional: asegura que sea transparente */
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background: var(--card);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.logo {
+  width: 44px; 
+  height: 44px; 
+  background-image: url('libros/logosere1.jpg'); 
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+.logo-group{display:flex; align-items:center; gap: 20px;}
+.logo-text {font-size: 1.8rem;font-weight: 700;color: var(--text);letter-spacing: 0.5px;}
+.nav {
+  position: fixed;
+  display: none; /* Ocultar por defecto */
+  top: 0;
+  right: -100%; /* Oculto fuera de la pantalla */
+  width: 280px;
+  height: 100vh;
+  background: var(--card);
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6rem 2rem 2rem;
+  gap: 1.5rem;
+  transition: right 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.4);
+  z-index: 1001;
+}
+.nav.active {
+  display: flex; /* Mostrar cuando esté activo */
+  right: 0; /* Mostrar el menú */
+}
+.nav-link, .nav-button{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600}
+/* Estilo para el último botón en el menú (Login/Logout) */
+.nav .nav-button:last-of-type {
+  margin-top: auto; /* Empuja el botón hacia abajo */
+  width: calc(100% - 4rem); /* Ocupa el ancho del padding */
+  text-align: center;
+}
+.nav-link:hover,.nav-button:hover{color:var(--gold)}
+.nav-button{background:transparent;border:1px solid rgba(0,0,0,0.1)}
+.nav-button:hover {background: var(--gold); color: var(--card);}
+
+.menu-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Contenedor para acciones del header (búsqueda, menú) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Espacio entre el botón de búsqueda y el de menú */
+}
+
+/* Botón de cierre 'X' dentro del menú */
+.close-menu-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.close-menu-btn:hover { color: var(--gold); }
+
+/* Botón para cambiar tema */
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--muted);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.theme-toggle-btn:hover { background: var(--glass); color: var(--gold); }
+html[data-theme="dark"] .theme-toggle-btn { border-color: rgba(255,255,255,0.1); }
+
+.search-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--muted);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.search-toggle-btn:hover { background: var(--glass); color: var(--gold); }
+html[data-theme="dark"] .search-toggle-btn { border-color: rgba(255,255,255,0.1); }
+
+/* ===== BOTONES ===== */
+.btn {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  font-weight: 600;
+}
+.btn-primary:hover { background: #d4af37;}
+.btn-secondary { background: transparent; border: 1px solid rgba(0,0,0,0.1); color: var(--text);}
+.btn-secondary:hover { background: var(--gold); color: var(--card);}
+.btn-danger { background: #e53935; color: #fff;}
+.btn-danger:hover { background: #c62828;}
+.btn-primary:hover { background: #d4af37; transform: translateY(-2px); }
+html[data-theme="dark"] .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text);}
+.btn-secondary:hover { background: var(--gold); color: var(--bg);}
+.btn-danger { background: #e53935; color: #fff; border: none; }
+.btn-danger:hover { background: #c62828; }
+
+/* ===== CARDS Y CONTENEDORES ===== */
+.card,
+.book-card,
+.library-book,
+.favorite-book,
+.profile-section,
+.admin-panel {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+.book-info h3,
+.section-title,
+.profile-info h2,
+.admin-panel h2 {
+  color: var(--gold);
+}
+.book-info p,
+.profile-info .profile-email,
+.profile-info .profile-bio,
+.admin-panel p {
+  color: var(--text);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--card);
+  padding: 2rem 1rem;
+  margin-top: 40px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  color: var(--text);
+  text-align: center;
+}
+.footer .contact-info {display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.95rem;}
+.footer .contact-info p { margin: 0; display: flex; align-items: center; gap: 8px; color: var(--muted);}
+.footer .contact-info i {color: var(--gold); font-size: 1rem;}
+.footer-bottom {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 1rem;
+}
+
+/* ===== Carrusel Coverflow ===== */
+.carousel-coverflow{position:relative;width:100%;margin:28px 0;min-height:280px;display:flex;align-items:center;justify-content:center}
+.carousel-coverflow-track{display:flex;align-items:center;justify-content:center;gap:14px;transition:transform 0.45s cubic-bezier(.4,0,.2,1);width:80%}
+.carousel-coverflow-slide{flex:0 0 180px;opacity:0.6;transform:scale(0.9);transition:all .35s;cursor:pointer}
+.carousel-coverflow-slide img{width:180px;height:250px;object-fit:cover;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.carousel-coverflow-slide:hover {
+  transform: scale(1.06);
+  opacity: 1;
+}
+.carousel-btn{background:rgba(0,0,0,0.05);color:var(--text);border:none;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;margin:0 8px}
+@media (max-width:700px){
+  .carousel-coverflow-track{width:95%}
+  .carousel-coverflow-slide{flex:0 0 110px}
+  .carousel-coverflow-slide img{width:110px;height:160px}
+}
+
+/* --- Catálogo de libros --- */
+.catalogo{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:18px;margin-top:18px}
+.book-card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.book-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.book-info{padding:12px}
+.book-info h3{margin:0 0 6px;font-size:1.05rem}
+.book-info p{margin:0;color:var(--muted);font-size:0.95rem}
+.book-meta{display:flex; gap:8px; margin-top:8px; color:var(--muted); font-size:0.85rem}
+.book-actions{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px }
+.btn-primary{background:var(--gold);color:var(--card);border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn-secondary{background:transparent;border:1px solid rgba(0,0,0,0.1);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
+/* Portada */
+.book-card img.book-cover {
+  width: 100%;
+  height: 360px;   /* más grande */
+  object-fit: contain; /* Asegura que la imagen se vea completa sin distorsionarse */
+  border-bottom: 3px solid #000000;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 3px solid var(--bg);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ===== Paginación ===== */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+.paginacion button {
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid rgba(0,0,0,0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+html[data-theme="dark"] .paginacion button { border-color: rgba(255,255,255,0.1); }
+.paginacion button:hover { background: var(--glass); color: var(--gold); }
+.paginacion button.activo {
+  background: #000000; /* Fondo negro */
+  color: var(--gold); /* Texto dorado */
+  border-color: var(--gold);
+}
+
+/* ===== Secciones por Género ===== */
+.genre-section {
+  margin-top: 48px;
+}
+
+.genre-section .section-title {
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+html[data-theme="dark"] .genre-section .section-title {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+/* ===== Layout comunes ===== */
+.container {width: 100%; max-width: 1100px; margin: 0 auto; padding: 1rem;}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  padding: 1rem;
+}
+
+/* ===== TABS PERFIL ===== */
+.tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 2px solid rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-radius: 8px 8px 0 0;
+}
+.tab-btn:hover { background: rgba(0,0,0,0.05); color: var(--text);}
+.tab-btn.active { background: var(--card); color: var(--gold); font-weight: 600; border-bottom: 2px solid var(--gold);}
+/* Contenido de cada pestaña */
+.tab-pane { display: none; padding: 12px 0; animation: fadeIn 0.3s ease;}
+.tab-pane.active { display: block;}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== PERFIL ===== */
+.profile-header { background: var(--card); color: var(--text);}
+.profile-header { background: var(--card); }
+.profile-avatar img { border: 3px solid var(--gold);}
+.profile-stats .stat { background: rgba(0,0,0,0.05); color: var(--text);}
+.profile-stats strong { color: var(--gold);
+}
+
+ 
+/* ===== Grid libros en perfil ===== */
+.grid-books { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+.library-book, .favorite-book { background:#fff; border:1px solid #e5e7eb; border-radius:12px; box-shadow: var(--shadow-sm); overflow:hidden; }
+
+/* ===== Modal genérico ===== */
+.edit-profile-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.edit-profile-modal.active { display: flex; }
+.modal-content { width: 100%; max-width: 560px; border-radius: 12px; background-color: var(--card); }
+.close-modal-btn { border: none; cursor: pointer; background-color: transparent;}
+.close-modal-btn { background: transparent; border: none; cursor: pointer; }
+
+/* Estilos para el formulario de edición de perfil */
+#editProfileForm #previewImage {
+  width: 88px;
+  height: 88px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid var(--glass);
+}
+
+#editProfileForm .form-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--bg); /* Usa el fondo principal */
+  border: 1px solid var(--glass); /* Borde sutil */
+  color: var(--text); /* Color de texto del tema */
+  transition: border-color 0.2s ease;
+}
+#editProfileForm .form-input:focus { outline: none; border-color: var(--gold); }
+
+/* ===== Notificación ===== */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #27ae60;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+.notification.show {transform: translateX(0);}
+.filters-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px;}
+.filters-container select, .filters-container .btn-clear {
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+.filter-group-year { display: flex; align-items: center; gap: 5px;}
+.filter-group-year input {
+  width: 100px;
+  padding: 10px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px;
+  background: #ffffff; /* Forzar fondo blanco */
+  color: #000000; /* Forzar texto negro */
+}
+.filter-group-year input::placeholder { color: #6c757d; /* Color de placeholder para fondo blanco */}
+
+/* ===== Autenticación (Login & Registro) ===== */
+.lb-auth-bg {
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.lb-auth-main-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  padding: 40px 35px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.lb-auth-main-container:hover { transform: translateY(-3px); }
+.lb-auth-logo i {font-size: 2.2rem; color: var(--gold); margin-top: 10px; margin-bottom: 8px; display: block;}
+.lb-auth-logo h2 { color: var(--text); font-weight: 700; margin-bottom: 20px;}
+.lb-auth-form-group { position: relative; margin-bottom: 20px; }
+.lb-auth-input {
+  width: 100%;
+  padding: 12px 40px; /* Ajustado para íconos en ambos lados */
+  border: 1px solid rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text);
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+.lb-auth-input::placeholder {color: var(--muted);}
+.lb-auth-input:focus { border: 1px solid var(--gold); box-shadow: 0 0 0 3px rgba(201,162,39,0.25); outline: none;}
+/* Se hace más específico para que no afecte al ícono del ojo */
+.lb-auth-form-group > i {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1rem;
+}
+/* ✅ Estilo para el botón de mostrar/ocultar contraseña */
+.lb-auth-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.lb-auth-btn-primary {
+  width: 100%;
+  background: var(--gold);
+  color: var(--card);
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+.lb-auth-btn-primary:hover {
+  background: #d4af37;
+  transform: translateY(-2px);
+}
+.lb-auth-link { margin-top: 18px; font-size: 0.9rem; color: var(--text);}
+.lb-auth-link a { color: var(--gold); font-weight: 600; text-decoration: none;}
+.lb-auth-link a:hover { text-decoration: underline; }
+/* Requisitos de contraseña */
+.lb-auth-password-requirements h4 {  color: var(--gold);}
+.lb-auth-password-requirements ul { text-align: left;  color: var(--muted);}
+.lb-auth-password-requirements li { margin-bottom: 5px;}
+
+/* ===== NUEVA PÁGINA DE AUTENTICACIÓN ===== */
+.auth-page-bg {
+  /* ✅ Centrar el contenido */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* ✅ Asegurar que ocupe toda la altura */
+  background-image: url('https://i0.wp.com/efe.com/wp-content/uploads/2023/07/espana-rural-libros.jpg?fit=900%2C599&ssl=1');
+  background-size: cover;
+  background-position: center;
+  position: relative; /* Mantenemos esto para el pseudo-elemento */
+  z-index: 0;
+}
+.auth-page-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* ✅ Fondo oscurecido sin desenfoque */
+  z-index: -1;
+}
+.auth-page-bg .lb-auth-logo h2 {
+  color: #fff !important; /* ✅ Títulos en blanco (forzado) */
+}
+.auth-page-bg .lb-auth-main-container {
+  background: rgba(15, 17, 19, 0.6); /* Fondo semi-transparente */
+  backdrop-filter: blur(5px); /* Mantenemos un ligero desenfoque detrás del formulario */
+  border: 2px solid var(--gold); /* ✅ Marco dorado */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.auth-form-wrapper { display: none; }
+.auth-form-wrapper.active { display: block; animation: fadeIn 0.4s ease; }
+/* === Perfil === */
+.profile-header {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(62,39,35,0.1);
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+.profile-avatar img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover;}
+.profile-info h2 { font-size: 1.8rem; margin: 0; color: var(--gold);}
+.profile-info .profile-email { color: var(--muted); font-size: 0.95rem;}
+.profile-info .profile-bio { margin-top: 0.6rem; font-size: 1rem; max-width: 500px;}
+.profile-stats { display: flex; gap: 2rem; margin: 1rem ;}
+.profile-stats .stat { text-align: center; padding: 8px 16px; background: rgba(0,0,0,0.05); border-radius: 8px;}
+.profile-stats .stat { text-align: center; padding: 8px 16px; border-radius: 8px;}
+.profile-stats .stat strong { display: block; font-size: 1.4rem; color: var(--gold);}
+
+/* Secciones */
+.profile-section {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+.activity-list { list-style: none; padding: 0;}
+.activity-list li { margin-bottom: 0.8rem;  color: #6a6a6a;}
+.activity-list .icon { margin-right: 0.6rem;}
+
+#savedPdfsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* ← separación entre recuadros */
+  margin-top: 20px;
+}
+
+/* === Admin Panel === */
+.admin-panel {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 2rem;
+  border-radius: 14px;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  max-width: 900px;
+  margin: 2rem auto;
+}
+.admin-panel h2 { color: var(--gold); font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;}
+.admin-panel p { color: var(--muted); margin-bottom: 1.5rem;}
+.admin-form .form-group { margin-bottom: 1.2rem;}
+.admin-form label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gold);}
+.admin-form input[type="text"],
+.admin-form input[type="url"],
+.admin-form textarea,
+.admin-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.02);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.25s ease, box-shadow 0.25s ease;
+}
+.admin-form input::placeholder,
+.admin-form textarea::placeholder{ color: var(--muted);}
+.admin-form input:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201,162,39,0.25);
+}
+.admin-form input[type="file"] { padding: 8px; cursor: pointer;}
+.admin-form input[type="file"]::-webkit-file-upload-button {
+  background: var(--gold);
+  color: var(--card);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.admin-form input[type="file"]::-webkit-file-upload-button:hover { background: #d4af37;}
+.admin-form .btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: var(--card);
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  margin-top: 0.5rem;
+}
+.admin-form .btn-primary:hover { background: #d4af37;}
+
+/* ===== TABLA DE LIBROS CARGADOS ===== */
+#adminBooksList {
+  margin-top: 30px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.admin-book-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.admin-book-card:hover { transform: translateY(-5px);}
+.admin-book-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;}
+.admin-book-card h4 { margin: 5px 0; color: var(--gold);}
+.admin-book-card p,
+.admin-book-card small { color: var(--muted);}
+
+/* ===== Modal de detalles del libro ===== */
+.book-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.book-modal.show {display: flex;}
+.book-modal-content {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.1);
+  max-width: 900px; /* <-- Más ancho */
+  width: 100%;
+  border-radius: var(--radius);
+  padding: 24px 30px; /* <-- Mejor espaciado */
+  position: relative;
+  max-height: 85vh; /* <-- Altura máxima para evitar desbordamiento */
+  overflow-y: auto; /* <-- Barra de movimiento vertical si es necesario */
+  display: flex;
+  flex-direction: column;
+}
+.close-modal { position: absolute; right: 15px; top: 10px; font-size: 1.5rem; cursor: pointer; background-color: transparent; color: var(--muted);}
+.close-modal { position: absolute; right: 15px; top: 10px; font-size: 1.5rem; cursor: pointer; color: var(--muted);}
+.book-modal-grid {display: flex; gap: 20px; flex-wrap: wrap;}
+.book-cover-container img {width: 200px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+.book-info-container { flex: 1;}
+
+/* ===== Sección de Reseñas en Modal ===== */
+.book-reviews-container {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+#reviewFormContainer {
+  background: rgba(0,0,0,0.03);
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#reviewFormContainer h4 {
+  margin-top: 0;
+  color: var(--gold);
+}
+
+.review-rating-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.review-rating-input .stars {
+  cursor: pointer;
+  color: #ccc;
+}
+
+.review-rating-input .stars i:hover,
+.review-rating-input .stars i.hover,
+.review-rating-input .stars i.active {
+  color: var(--gold);
+}
+
+#reviewForm textarea {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--text);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.review-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.review-item:last-child { border-bottom: none; }
+.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.review-author { font-weight: 600; color: var(--text); }
+.review-date { font-size: 12px; color: var(--muted); }
+.review-body { font-size: 14px; color: var(--muted); }
+
+/* ===== Modal de Búsqueda ===== */
+.search-modal {
+  display: none;
+  position: fixed;
+  z-index: 2001;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+}
+.search-modal.show { display: block; }
+
+.search-modal-content {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden; /* Para que el borde del input no se salga */
+}
+
+.search-modal-header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--glass);
+}
+
+.search-modal-header i {
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+#modalSearchInput {
+  width: 100%;
+  padding: 20px 15px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.2rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#modalSearchInput:focus {
+  border-bottom-color: var(--gold);
+}
+
+#modalSearchInput::placeholder {
+  color: var(--muted);
+}
+
+.search-results-container {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.search-result-item {
+  display: block;
+  padding: 12px 20px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+  margin: 2px 0;
+}
+.search-result-item:hover { 
+  background: var(--glass); 
+  color: var(--gold);
+}
+.search-result-item strong { color: var(--text); }
+.search-result-item:hover strong { color: var(--gold); }
+.search-placeholder { color: var(--muted); text-align: center; padding: 40px 20px; }
+
+/* ===== Estilos para formularios de administración ===== */
+.admin-form {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 2rem;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-group label i {
+  margin-right: 8px;
+  width: 16px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.form-group select option {
+  background: var(--card);
+  color: var(--text);
+  padding: 10px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(0,0,0,0.04);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+}
+
+.form-group small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+
+.admin-table-section {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.admin-table th {
+  background: rgba(0,0,0,0.03);
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admin-table th i {
+  margin-right: 8px;
+}
+
+.admin-table td {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.admin-table tr:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  margin: 0 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+}
+
+.btn-edit:hover {
+  background: rgba(33, 150, 243, 0.3);
+}
+
+.btn-delete {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+.btn-delete:hover {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.loading {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  padding: 20px;
+}
+
+.no-books {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  padding: 40px;
+}
+
+/* ===== Responsive para admin ===== */
+@media (max-width: 768px) {
+  .admin-form {
+    padding: 16px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+  
+  .admin-table {
+    font-size: 12px;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 12px;
+  }
+}

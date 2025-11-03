@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Perfil - Serendipia</title>
+  <link href="styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- ✅ Añadimos Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo-group">
+      <div class="logo"></div><span class="logo-text">Serendipia</span>
+    </div>
+    <!-- Botón de menú para móviles -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav" id="mainNav">
+      <button class="close-menu-btn" id="closeMenuBtn" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+      <a href="admin.html" class="nav-link" id="adminLink" style="display:none;">Administración</a>
+      <!-- ✅ Botón para cambiar tema -->
+      <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Cambiar tema">
+        <i class="fas fa-moon"></i>
+      </button>
+      <a href="#" class="nav-button" onclick="cerrarSesion()">Cerrar Sesión</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="card profile-header">
+      <div class="profile-avatar">
+        <img id="profileAvatarImg" src="user.jpg" alt="avatar">
+      </div>
+      
+      <div class="profile-info">
+        <h2 class="profile-name" id="profileName">Nombre...</h2>
+        <p class="profile-email" id="profileEmail">Gmail...</p>
+        <p class="profile-bio" id="profileBio"> Biografia...</p>
+        <div class="profile-stats">
+          <div class="stat"><strong id="totalReadBooks">0</strong><div>Leídos</div></div>
+          <div class="stat"><strong id="totalLibraryBooks">0</strong><div>En mi biblioteca</div></div>
+          <div class="stat"><strong id="currentlyReading">0</strong><div>Leyendo</div></div>
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn-secondary edit-profile-btn" onclick="openEditModal()">Editar Perfil</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px" class="card">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-biblioteca">Mi Biblioteca</button>
+        <button class="tab-btn" data-tab="tab-resumen">Resumen</button>
+        <button class="tab-btn" data-tab="tab-lectura">En Lectura</button>
+        <button class="tab-btn" data-tab="tab-favoritos">Favoritos</button>
+      </div>
+
+      <div id="tab-biblioteca" class="tab-pane active">
+        <h3 class="section-title">Mi Biblioteca Personal</h3>
+        <div id="profileLibraryGrid" class="grid-books">
+          <div class="loading-library">Cargando tu biblioteca...</div>
+        </div>
+        <div id="emptyLibraryState" style="display:none;color:var(--muted);padding:12px;text-align:center">
+          <i class="fas fa-book-open" style="font-size:48px;margin-bottom:16px;display:block;"></i>
+          <p>No tienes libros en tu biblioteca aún</p>
+          <p style="font-size:14px;margin-top:8px;">Ve al catálogo y agrega algunos libros para comenzar tu colección</p>
+          <a href="index.html" class="btn-primary" style="margin-top:16px;display:inline-block;">Explorar Catálogo</a>
+        </div>
+      </div>
+
+      <div id="tab-resumen" class="tab-pane">
+        <h3 class="section-title">Actividad Reciente</h3>
+        <div id="recentActivity">
+          <p style="color:var(--muted);text-align:center;padding:20px;">No hay actividad reciente</p>
+        </div>
+
+        <h3 class="section-title" style="margin-top:16px">Géneros Preferidos</h3>
+        <div id="genreChart">
+          <!-- ✅ Lienzo para el gráfico -->
+          <canvas id="genreChartCanvas" style="max-height: 300px;"></canvas>
+        </div>
+      </div>
+
+      <div id="tab-lectura" class="tab-pane">
+        <h3 class="section-title">Actualmente Leyendo</h3>
+        <div id="currentReadingContent">
+          <p style="color:var(--muted);text-align:center;padding:20px;">No tienes libros en lectura actualmente</p>
+        </div>
+      </div>
+
+      <div id="tab-favoritos" class="tab-pane">
+        <h3 class="section-title">Favoritos</h3>
+        <div id="favoritesGrid">
+          <p style="color:var(--muted);text-align:center;padding:20px;">No tienes libros favoritos aún</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ NUEVA SECCIÓN DE RECOMENDACIONES -->
+    <div class="card" style="margin-top:16px">
+      <h3 class="section-title"><i class="fas fa-star" style="margin-right: 8px;"></i> Libros recomendados para ti</h3>
+      <div id="recommendedBooksGrid" class="grid-books">
+        <p style="color:var(--muted);text-align:center;padding:20px;grid-column: 1 / -1;">Calculando recomendaciones...</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 class="section-title">Mis PDFs guardados</h3>
+      <div id="savedPdfsList">
+        <p style="color:var(--muted);text-align:center;padding:20px;">No tienes PDFs disponibles aún</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal editar perfil -->
+  <div id="editProfileModal" class="edit-profile-modal" aria-hidden="true">
+    <div class="modal-content card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Editar Perfil</h3>
+        <button id="closeModal" class="close-modal-btn btn-secondary">×</button>
+      </div>
+      <form id="editProfileForm" style="margin-top:12px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <img id="previewImage" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODgiIGhlaWdodD0iODgiIHZpZXdCb3g9IjAgMCA4OCA4OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDQiIGN5PSI0NCIgcj0iNDQiIGZpbGw9IiNjOWEyMjciLz4KPGNpcmNsZSBjeD0iNDQiIGN5PSIzMyIgcj0iMTMiIGZpbGw9IiMwZjExMTMiLz4KPHBhdGggZD0iTTIyIDcyQzIyIDYwIDMzIDU1IDQ0IDU1UzY2IDYwIDY2IDcyIiBzdHJva2U9IiMwZjExMTMiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=">
+          <input id="profileImage" type="file" accept="image/*">
+        </div>
+        <div style="margin-top:10px">
+          <label>Nombre</label>
+          <input id="userName" class="form-input" type="text">
+        </div>
+        <div style="margin-top:8px">
+          <label>Email</label>
+          <input id="userEmail" class="form-input" type="email">
+        </div>
+        <div style="margin-top:8px">
+          <label>Biografía</label>
+          <textarea id="userBio" class="form-input" rows="3">Amante de la literatura fantástica...</textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button id="cancelEdit" type="button" class="btn-secondary">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+  <div class="contact-info">
+    <p><i class="fas fa-phone"></i> +54 9 11 1234-5678</p>
+    <p><i class="fas fa-envelope"></i> serendipia@gmail.com</p>
+  </div>
+  <div class="footer-bottom">
+    © 2025 Serendipia — Todos los derechos reservados.
+  </div>
+</footer>
+
+  <script src="utils.js"></script>
+  <script src="perfil.js" defer></script>
+</body>
+</html>

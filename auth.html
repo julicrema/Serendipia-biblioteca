@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acceso - Serendipia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="auth-page-bg">
+  <div class="lb-auth-main-container">
+    <div class="auth-toggle-container">
+      <button id="showLoginBtn" class="auth-toggle-btn active" data-form="loginFormContainer">Iniciar Sesión</button>
+      <button id="showRegisterBtn" class="auth-toggle-btn" data-form="registerFormContainer">Crear Cuenta</button>
+    </div>
+    <!-- Contenedor del Formulario de Login -->
+    <div id="loginFormContainer" class="auth-form-wrapper active">
+      <div class="lb-auth-logo">
+        <i class="fas fa-sign-in-alt"></i>
+        <h2>Iniciar Sesión</h2>
+      </div>
+      <form id="loginForm">
+        <div class="lb-auth-form-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="usuario" class="lb-auth-input" placeholder="Usuario o correo electrónico" required>
+        </div>
+        <div class="lb-auth-form-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" class="lb-auth-input" placeholder="Contraseña" required>
+          <span class="lb-auth-toggle-password" id="togglePassword">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <button class="lb-auth-btn-primary" type="submit">
+          <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </button>
+      </form>
+    </div>
+
+    <!-- Contenedor del Formulario de Registro -->
+    <div id="registerFormContainer" class="auth-form-wrapper">
+      <div class="lb-auth-logo">
+        <i class="fas fa-user-plus"></i>
+        <h2>Crear Cuenta</h2>
+      </div>
+      <form id="registroForm">
+        <div class="lb-auth-form-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="nombre" class="lb-auth-input" placeholder="Nombre completo" required>
+        </div>
+        <div class="lb-auth-form-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" class="lb-auth-input" placeholder="Correo electrónico" required>
+        </div>
+        <div class="lb-auth-form-group">
+          <i class="fas fa-user-shield"></i>
+          <input type="text" id="username" class="lb-auth-input" placeholder="Nombre de usuario" required>
+        </div>
+        <div class="lb-auth-form-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="regPassword" class="lb-auth-input" placeholder="Contraseña" required>
+          <span class="lb-auth-toggle-password" id="toggleRegPassword">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <div class="lb-auth-form-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirmPassword" class="lb-auth-input" placeholder="Confirmar contraseña" required>
+          <span class="lb-auth-toggle-password" id="toggleConfirmPassword">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <div class="lb-auth-password-requirements">
+          <ul>
+            <li id="req-length">Mínimo 5 caracteres</li>
+            <li id="req-uppercase">Al menos una letra mayúscula</li>
+          </ul>
+        </div>
+        <button class="lb-auth-btn-primary" type="submit">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Redirigir si ya hay sesión activa
+    (function checkSession() {
+      const usuarioActual = JSON.parse(localStorage.getItem('usuarioActual'));
+      if (usuarioActual) {
+        window.location.href = usuarioActual.isAdmin ? 'admin.html' : 'index.html';
+      }
+    })();
+
+    // Sembrar usuarios admin si no existen
+    (function seedAdmins() {
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      let hasChanges = false;
+
+      const adminsToSeed = [
+        { username: 'admin', email: 'admin@admin.com', password: '123', nombre: 'Administrador' },
+        { username: 'julicremita', email: 'Julitopodebiblioteca@gmail.com', password: 'Juli123', nombre: 'Julito' }
+      ];
+
+      adminsToSeed.forEach(admin => {
+        if (!usuarios.some(u => u.username === admin.username)) {
+          usuarios.push({
+            ...admin,
+            isAdmin: true,
+            fechaRegistro: new Date().toISOString()
+          });
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    })();
+
+    // Lógica de Login
+    function iniciarSesion() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const password = document.getElementById('password').value;
+      if (!usuario || !password) return alert('Por favor, completa todos los campos');
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      const usuarioEncontrado = usuarios.find(u => (u.username === usuario || u.email === usuario) && u.password === password);
+
+      if (usuarioEncontrado) {
+        localStorage.setItem('usuarioActual', JSON.stringify(usuarioEncontrado));
+        alert('¡Bienvenido, ' + usuarioEncontrado.nombre + '!');
+        window.location.href = usuarioEncontrado.isAdmin ? 'admin.html' : 'index.html';
+      } else {
+        alert('Usuario, email o contraseña incorrectos');
+      }
+    }
+
+    // Lógica de Registro
+    function registrarUsuario() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (!nombre || !email || !username || !password || !confirmPassword) return alert('Por favor, completa todos los campos');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return alert('Por favor, ingresa un email válido');
+      if (password !== confirmPassword) return alert('Las contraseñas no coinciden');
+      if (password.length < 5 || !/[A-Z]/.test(password)) return alert('La contraseña no cumple con los requisitos');
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      if (usuarios.some(u => u.username === username)) return alert('El nombre de usuario ya existe.');
+      if (usuarios.some(u => u.email === email)) return alert('El email ya está registrado.');
+
+      usuarios.push({ nombre, email, username, password, isAdmin: false, fechaRegistro: new Date().toISOString() });
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+      alert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
+      window.location.reload(); // Recarga para mostrar el formulario de login
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Toggle de formularios
+      const loginBtn = document.getElementById('showLoginBtn');
+      const registerBtn = document.getElementById('showRegisterBtn');
+      const loginFormContainer = document.getElementById('loginFormContainer');
+      const registerFormContainer = document.getElementById('registerFormContainer');
+
+      const toggleForms = (showLogin) => {
+        loginBtn.classList.toggle('active', showLogin);
+        registerBtn.classList.toggle('active', !showLogin);
+        loginFormContainer.classList.toggle('active', showLogin);
+        registerFormContainer.classList.toggle('active', !showLogin);
+      };
+
+      loginBtn.addEventListener('click', () => toggleForms(true));
+      registerBtn.addEventListener('click', () => toggleForms(false));
+
+      // Check URL params to show register form
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('view') === 'register') {
+        toggleForms(false);
+      }
+
+      // Enviar formularios
+      document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); iniciarSesion(); });
+      document.getElementById('registroForm').addEventListener('submit', (e) => { e.preventDefault(); registrarUsuario(); });
+
+      // Validar contraseña en tiempo real
+      const regPasswordInput = document.getElementById('regPassword');
+      regPasswordInput.addEventListener('input', () => {
+        document.getElementById('req-length').style.color = regPasswordInput.value.length >= 5 ? '#4a7c59' : 'var(--muted)';
+        document.getElementById('req-uppercase').style.color = /[A-Z]/.test(regPasswordInput.value) ? '#4a7c59' : 'var(--muted)';
+      });
+
+      // Toggle de visibilidad de contraseña
+      const setupToggle = (toggleId, inputId) => {
+        const button = document.getElementById(toggleId);
+        const input = document.getElementById(inputId);
+        if (button && input) {
+          button.addEventListener('click', () => {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            button.querySelector('i').classList.toggle('fa-eye-slash');
+          });
+        }
+      };
+      setupToggle('togglePassword', 'password');
+      setupToggle('toggleRegPassword', 'regPassword');
+      setupToggle('toggleConfirmPassword', 'confirmPassword');
+    });
+  </script>
+</body>
+</html>
